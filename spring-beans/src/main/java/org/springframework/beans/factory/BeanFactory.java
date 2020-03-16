@@ -139,6 +139,7 @@ public interface BeanFactory {
 	 * with the specified name
 	 * @throws BeansException if the bean could not be obtained
 	 */
+	//根据Bean的名字,获取在IoC容器中得到的Bean实例
 	Object getBean(String name) throws BeansException;
 
 	/**
@@ -159,6 +160,7 @@ public interface BeanFactory {
 	 * @throws BeanNotOfRequiredTypeException if the bean is not of the required type
 	 * @throws BeansException if the bean could not be created
 	 */
+	//根据bean的类型,返回指定类型的bean对象
 	<T> T getBean(String name, @Nullable Class<T> requiredType) throws BeansException;
 
 	/**
@@ -316,6 +318,7 @@ public interface BeanFactory {
 	 * @see #getBean
 	 * @see #isTypeMatch
 	 */
+	//得到bean实例的class类型
 	@Nullable
 	Class<?> getType(String name) throws NoSuchBeanDefinitionException;
 
@@ -330,6 +333,7 @@ public interface BeanFactory {
 	 * @return the aliases, or an empty array if none
 	 * @see #getBean
 	 */
+	//得到bean的别名,如果根据别名检索,那么其原名也会被检索出来
 	String[] getAliases(String name);
 
 }
