@@ -16,6 +16,12 @@
 
 package org.springframework.core.io;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
@@ -23,12 +29,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * Default implementation of the {@link ResourceLoader} interface.
@@ -140,6 +140,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	}
 
 
+	//获取Resource的具体方法
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
@@ -151,6 +152,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 		}
 
+		//如果是类路径的方式,使用ClassPathResource来得到Bean文件的资源对象
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
@@ -160,11 +162,14 @@ public class DefaultResourceLoader implements ResourceLoader {
 		else {
 			try {
 				// Try to parse the location as a URL...
+				//如果是URL方式,使用UrlResource作为bean文件的资源对象
 				URL url = new URL(location);
 				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));
 			}
 			catch (MalformedURLException ex) {
 				// No URL -> resolve as resource path.
+				//如果既不是classpath标识又不是URL标识的Resource定位
+				// 则调用容器本身的getResourceByPath(location)方法获取Resource
 				return getResourceByPath(location);
 			}
 		}
